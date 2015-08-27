@@ -76,5 +76,10 @@ public class Glass {
     public void setNote(String note) {
         this.note = note;
     }
+
+    @Override
+    public String toString() {
+        return "Code = " + getCode() ;
+    }
 }
 

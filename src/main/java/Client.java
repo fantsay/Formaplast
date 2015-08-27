@@ -1,45 +1,26 @@
 import com.gargoylesoftware.htmlunit.*;
-import com.gargoylesoftware.htmlunit.html.*;
-import com.gargoylesoftware.htmlunit.httpclient.HtmlUnitBrowserCompatCookieSpec;
-import com.gargoylesoftware.htmlunit.javascript.host.dom.Document;
-import com.gargoylesoftware.htmlunit.javascript.host.dom.Node;
-import com.gargoylesoftware.htmlunit.javascript.host.xml.XMLDocument;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.gargoylesoftware.htmlunit.html.HtmlTable;
+import com.gargoylesoftware.htmlunit.html.HtmlTableRow;
 import com.gargoylesoftware.htmlunit.util.Cookie;
-import jdk.nashorn.internal.parser.JSONParser;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-import org.xml.sax.XMLReader;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
-import java.io.StringReader;
 import java.net.MalformedURLException;
-import java.net.URI;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by fantsay on 8/7/15.
  */
 public class Client {
     WebClient webClient = new WebClient(BrowserVersion.INTERNET_EXPLORER_11);
-    Map<String,Map<String,String>> db = new HashMap<>();
-
-
+    HtmlPage resultPage;
     URL site;
-    public void getPage(String page) throws IOException {
-
+    public void getPage(String page,String code) {
 
 
         try {
-            site = new URL("http://fps-catalog.com.ua/m_sc/last_table.php");
+            site = new URL(page);
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
@@ -47,40 +28,28 @@ public class Client {
         reqGet.setHttpMethod(HttpMethod.GET);
         WebRequest reqPost = new WebRequest(site);
         reqPost.setHttpMethod(HttpMethod.POST);
-        reqPost.setAdditionalHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
-        reqPost.setAdditionalHeader("Host","fps-catalog.com.ua");
-        reqPost.setAdditionalHeader("X-Requested-With","XMLHttpRequest");
-        reqPost.setAdditionalHeader("Referer","http://fps-catalog.com.ua/");
-        reqPost.setAdditionalHeader("Cookie","term=182181; PHPSESSID=c40f8e42df5f6ea71fcae2918ecc7e5c; term=546417; _ga=GA1.3.1070382118.1439109851");
-        //reqPost.setAdditionalHeader("","");
-        reqPost.setRequestBody("eve=&id=%23scode_item&p1=5427AGNBL1C");
+//        reqPost.setAdditionalHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
+//        reqPost.setAdditionalHeader("Host", "fps-catalog.com.ua");
+//        reqPost.setAdditionalHeader("X-Requested-With", "XMLHttpRequest");
+//        reqPost.setAdditionalHeader("Referer", "http://fps-catalog.com.ua/");
+//        reqPost.setAdditionalHeader("Cookie", "term=694006; term=8459; PHPSESSID=1bdc8808c01604bcb16c33ae3a6454ed;  _ga=GA1.3.678498098.1438938050");
 
-        reqPost.setUrl(site);
-
-//        request.setRequestBody("eve=&id=%23scode_item&p1=5427AGNBL1C");
-
-
-
-       CookieManager manager =  webClient.getCookieManager();
-       manager.setCookiesEnabled(true);
-//        HtmlPage main = webClient.getPage(reqGet);
+        reqPost.setRequestBody("eve=&id=%23scode_item&p1="+code);
+        CookieManager manager = webClient.getCookieManager();
+        manager.setCookiesEnabled(true);
         java.util.Set<Cookie> cookies = webClient.getCookieManager().getCookies();
 
-     webClient.getOptions().setThrowExceptionOnScriptError(false);
+        webClient.getOptions().setThrowExceptionOnScriptError(false);
         webClient.waitForBackgroundJavaScript(50000);
-        HtmlPage page1 = webClient.getPage(reqPost);
-        webClient.waitForBackgroundJavaScript(50000);
-        HtmlTable table = (HtmlTable) page1.getByXPath("//table[@class='k-grid-item']").get(0);
-        table.getRowCount(); // loop for rows then loop for cells in each row
-
-        HtmlTableRow row = table.getRow(1);
-        HtmlTableRow.CellIterator cellIterator = row.getCellIterator();
-        while (cellIterator.hasNext())
-        {
-            cellIterator.next().asText();
-
+        try {
+            resultPage = webClient.getPage(reqPost);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-//        System.out.println(row.asText());
+        webClient.waitForBackgroundJavaScript(50000);
+
+
+        //System.out.println(row.asText());
 
 //        DomNodeList<DomElement> td = page1.getElementsByTagName("td");
 //        DomElement domElement = td.get(10);
@@ -124,6 +93,28 @@ public class Client {
 
 
     }
+    public Map<Integer,List<String>> getGlassArray()
+    {
+        int counter = 0;
+        HtmlTable table = (HtmlTable) resultPage.getByXPath("//table[@class='k-grid-item']").get(0);
+        int rowCount = table.getRowCount();// loop for rows then loop for cells in each row
+        Map<Integer,List<String>> mapa = new HashMap<>();
 
+        for (int i = 1; i<rowCount; i++) {
+            List<String> glassString = new LinkedList<>();
+            HtmlTableRow row = table.getRow(i);
+            HtmlTableRow.CellIterator cellIterator = row.getCellIterator();
+
+
+                while (cellIterator.hasNext()){
+                glassString.add(cellIterator.next().asText() );
+
+
+        }
+            mapa.put(counter,glassString);
+            counter++;
+        }
+        return mapa;
+    }
 
 }
