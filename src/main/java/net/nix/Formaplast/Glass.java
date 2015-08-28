@@ -1,3 +1,5 @@
+package net.nix.Formaplast;
+
 import java.util.List;
 
 /**

@@ -1,3 +1,5 @@
+package net.nix.Formaplast;
+
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -18,7 +20,7 @@ public class Parser {
    public List<Glass> getGlass()
    {
 
-    glString.values().forEach(this::getG); // For every List do getG, that returns Glass Object
+    glString.values().forEach(this::getG); // For every List do getG, that returns net.nix.Formaplast.Glass Object
 
     return glasses;
    }

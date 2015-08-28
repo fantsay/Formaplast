@@ -1,6 +1,4 @@
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-
-import java.io.IOException;
+package net.nix.Formaplast;
 
 /**
  * Created by fantsay on 8/7/15.
@@ -21,7 +19,7 @@ public class Runner {
         //parser.getGlass().iterator().forEachRemaining(System.out::println);
 
 
-       //ExcelConverter.createExel(DB.getGlass(current));
+       //net.nix.Formaplast.ExcelConverter.createExel(DB.getGlass(current));
 
 
 
