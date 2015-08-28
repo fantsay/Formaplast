@@ -37,7 +37,7 @@ public class Codes {
   if (iterator.hasNext())
         return iterator.next();
 
-    return "Empty";
+    return "0";
     }
 
     public boolean hasNext()
