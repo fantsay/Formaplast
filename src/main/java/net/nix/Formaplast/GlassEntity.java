@@ -1,11 +1,12 @@
 package net.nix.Formaplast;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by s6e8 on 8/13/15.
  */
-public class Glass {
+public class GlassEntity implements Serializable {
     private String code;
     private String description;
     private String manufact;
@@ -81,7 +82,7 @@ public class Glass {
 
     @Override
     public String toString() {
-        return "Code = " + getCode() ;
+        return "Code = " + getCode();
     }
 }
 

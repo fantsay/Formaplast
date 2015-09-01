@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -24,14 +25,15 @@ public class ExcelConverter {
 
 
     public void loadDB(PriceDB base, Codes code) {
-        this.db = base; this.code = code;
+        this.db = base;
+        this.code = code;
 
 
     }
 
     public void createWB() {
         exel = new XSSFWorkbook();
-        XSSFSheet spreadsheet = exel.createSheet("FormaParts");
+        spreadsheet = exel.createSheet("FormaParts");
 
     }
 
@@ -47,39 +49,40 @@ public class ExcelConverter {
         XSSFCell cell6 = row.createCell(6);
 
         cell.setCellValue("Code");
-        cell1.setCellValue("Manufacturer");
-        cell2.setCellValue("Quality");
-        cell3.setCellValue("Price");
-        cell4.setCellValue("Note");
+        cell1.setCellValue("Description");
+        cell2.setCellValue("Manufact");
+        cell3.setCellValue("Quality");
+        cell4.setCellValue("Price");
         cell5.setCellValue("Value");
         cell6.setCellValue("Info");
 
     }
 
     public void addDataInCells() {
+        Iterator<String> iterator1 = code.getIterator();
+        while (iterator1.hasNext()) {
+            String current = iterator1.next();
 
 
-        String current = code.getCode();
-        XSSFRow row = spreadsheet.createRow(rowNumber);
-        XSSFRow row1 = spreadsheet.createRow(rowNumber = rowNumber + 1);
-        XSSFCell cell = row.createCell(0);
-        cell.setCellValue("");
-while (true) {
+            List<GlassEntity> array = db.getGlass(current);
+            spreadsheet.createRow(rowNumber++).createCell(0).setCellValue(current);
+            Iterator<GlassEntity> iterator = array.iterator();
+            while (iterator.hasNext()) {
 
-    List<Glass> array = db.getGlass(current);
-    Glass gl =
+                GlassEntity gl = iterator.next();
+                XSSFRow row2 = spreadsheet.createRow(rowNumber++);
 
+                row2.createCell(0).setCellValue(gl.getCode());
+                row2.createCell(1).setCellValue(gl.getDescription());
+                row2.createCell(2).setCellValue(gl.getManufact());
+                row2.createCell(3).setCellValue(gl.getQuality());
+                row2.createCell(4).setCellValue(gl.getPrice());
+                row2.createCell(5).setCellValue(gl.getVal());
+                row2.createCell(6).setCellValue(gl.getNote());
 
-    gl.getCode();
-    gl.getManufact();
-    gl.getQuality();
-    gl.getPrice();
-    gl.getOptions();
-    gl.getVal();
-    gl.getNote();
-}
+            }
 
-
+        }
 
 
     }

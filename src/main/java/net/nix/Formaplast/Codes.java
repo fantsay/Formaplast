@@ -18,8 +18,7 @@ public class Codes {
     Iterator<String> iterator;
 
 
-    public Codes(String path)
-    {
+    public Codes(String path) {
         try {
             file = new FileReader(path);
             reader = new BufferedReader(file);
@@ -31,36 +30,36 @@ public class Codes {
     }
 
 
-    public String getCode()
-    {
+    public String getCode() {
 
-  if (iterator.hasNext())
-        return iterator.next();
+        if (iterator.hasNext())
+            return iterator.next();
 
-    return "0";
+        return "0";
     }
 
-    public boolean hasNext()
-    {
+    public boolean hasNext() {
         return iterator.hasNext();
     }
 
+    public Iterator<String> getIterator() {
+        return codes.iterator();
+    }
 
-    private void upload()
-    {
+    private void upload() {
         String currCode;
         try {
-            while ((currCode=reader.readLine())!=null)
-            {
-                codes.add(currCode);
+            while ((currCode = reader.readLine()) != null) {
+
+                if (!currCode.isEmpty())
+                    codes.add(currCode);
             }
             iterator = codes.iterator();
 
         } catch (IOException e) {
             e.printStackTrace();
-        }
-        finally {
-            if(reader!=null) try {
+        } finally {
+            if (reader != null) try {
                 reader.close();
             } catch (IOException e) {
                 e.printStackTrace();

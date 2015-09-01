@@ -9,37 +9,35 @@ import java.util.Map;
  */
 public class Parser {
 
-    private List<Glass> glasses;
-    private Map<Integer,List<String>> glString;
-    public Parser(Map<Integer,List<String>> glassString) {
+    private List<GlassEntity> glassEntities;
+    private Map<Integer, List<String>> glString;
+
+    public Parser(Map<Integer, List<String>> glassString) {
         this.glString = glassString;
-        this.glasses = new LinkedList<>();
+        this.glassEntities = new LinkedList<>();
 
     }
 
-   public List<Glass> getGlass()
-   {
+    public List<GlassEntity> getGlass() {
 
-    glString.values().forEach(this::getG); // For every List do getG, that returns net.nix.Formaplast.Glass Object
+        glString.values().forEach(this::getG); // For every List do getG, that returns net.nix.Formaplast.GlassEntity Object
 
-    return glasses;
-   }
+        return glassEntities;
+    }
 
-    private void getG(List<String> strings)
-    {
+    private void getG(List<String> strings) {
 
-        Glass glass = new Glass();
-        //List<String> strings = glString.get(row);
-        glass.setCode(strings.get(1));
-        glass.setDescription(strings.get(2));
-        glass.setManufact(strings.get(3));
-        glass.setQuality(strings.get(4));
-        glass.setOptions(strings.get(5));
-        glass.setNote(strings.get(6));
-        glass.setVal(strings.get(7));
-        glass.setNote(strings.get(8));
-        glasses.add(glass);
-//        return glasses;
+        GlassEntity glassEntity = new GlassEntity();
+        glassEntity.setCode(strings.get(1));
+        glassEntity.setDescription(strings.get(2));
+        glassEntity.setManufact(strings.get(3));
+        glassEntity.setQuality(strings.get(4));
+        glassEntity.setPrice(strings.get(5));
+        glassEntity.setDescription(strings.get(6));
+        glassEntity.setVal(strings.get(7));
+        glassEntity.setNote(strings.get(8));
+        glassEntities.add(glassEntity);
+
     }
 
 }

@@ -16,7 +16,8 @@ public class Client {
     WebClient webClient = new WebClient(BrowserVersion.INTERNET_EXPLORER_11);
     HtmlPage resultPage;
     URL site;
-    public void getPage(String page,String code) {
+
+    public void getPage(String page, String code) {
 
 
         try {
@@ -28,11 +29,10 @@ public class Client {
         reqGet.setHttpMethod(HttpMethod.GET);
         WebRequest reqPost = new WebRequest(site);
         reqPost.setHttpMethod(HttpMethod.POST);
-        reqPost.setRequestBody("eve=&id=%23scode_item&p1="+code);
+        reqPost.setRequestBody("p1=" + code);
         CookieManager manager = webClient.getCookieManager();
         manager.setCookiesEnabled(true);
         java.util.Set<Cookie> cookies = webClient.getCookieManager().getCookies();
-
         webClient.getOptions().setThrowExceptionOnScriptError(false);
         webClient.waitForBackgroundJavaScript(50000);
         try {
@@ -44,25 +44,24 @@ public class Client {
 
     }
 
-    public Map<Integer,List<String>> getGlassArray()
-    {
+    public Map<Integer, List<String>> getGlassArray() {
         int counter = 0;
         HtmlTable table = (HtmlTable) resultPage.getByXPath("//table[@class='k-grid-item']").get(0);
-        int rowCount = table.getRowCount();// loop for rows then loop for cells in each row
-        Map<Integer,List<String>> mapa = new HashMap<>();
+        int rowCount = table.getRowCount();     // loop for rows then loop for cells in each row
+        Map<Integer, List<String>> mapa = new HashMap<>();
 
-        for (int i = 1; i<rowCount; i++) {
+        for (int i = 1; i < rowCount; i++) {
             List<String> glassString = new LinkedList<>();
             HtmlTableRow row = table.getRow(i);
             HtmlTableRow.CellIterator cellIterator = row.getCellIterator();
 
 
-                while (cellIterator.hasNext()){
-                glassString.add(cellIterator.next().asText() );
+            while (cellIterator.hasNext()) {
+                glassString.add(cellIterator.next().asText());
 
 
-        }
-            mapa.put(counter,glassString);
+            }
+            mapa.put(counter, glassString);
             counter++;
         }
         return mapa;
