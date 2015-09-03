@@ -1,4 +1,4 @@
-package net.nix.Formaplast;
+package net.nixj.Formaplast;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -12,10 +12,16 @@ import java.util.List;
  * Created by fantsay on 8/27/15.
  */
 public class Codes {
-    FileReader file;
-    BufferedReader reader;
-    List<String> codes;
-    Iterator<String> iterator;
+   private FileReader file;
+    private BufferedReader reader;
+    private List<String> codes;
+
+    public List<String> getCodes() {
+        return codes;
+    }
+
+    private List<String> shortCodes;
+    private Iterator<String> iterator;
 
 
     public Codes(String path) {
@@ -29,6 +35,11 @@ public class Codes {
         }
     }
 
+    public Codes(List<String> codes)
+    {
+        this.codes=codes;
+        iterator = codes.iterator();
+    }
 
     public String getCode() {
 
@@ -37,6 +48,14 @@ public class Codes {
 
         return "0";
     }
+
+    public void longToShortCodes()
+    {
+        shortCodes = new LinkedList<>();
+       codes.forEach(s ->shortCodes.add(s.substring(0,4)));
+
+    }
+
 
     public boolean hasNext() {
         return iterator.hasNext();

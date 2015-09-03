@@ -1,4 +1,4 @@
-package net.nix.Formaplast;
+package net.nixj.Formaplast;
 
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;

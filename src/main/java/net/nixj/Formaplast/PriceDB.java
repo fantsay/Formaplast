@@ -1,14 +1,14 @@
-package net.nix.Formaplast;
+package net.nixj.Formaplast;
 
-import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by fantsay on 8/7/15.
  */
 public class PriceDB {
 
-    private HashMap<String, List<GlassEntity>> pair = new HashMap<String, List<GlassEntity>>();
+    private ConcurrentHashMap<String, List<GlassEntity>> pair = new ConcurrentHashMap<>();
     private static PriceDB DB;
 
     private PriceDB() {
@@ -33,7 +33,7 @@ public class PriceDB {
         return pair.get(code);
     }
 
-    public HashMap<String, List<GlassEntity>> getBase() {
+    public ConcurrentHashMap<String, List<GlassEntity>> getBase() {
         return pair;
     }
 

@@ -1,18 +1,18 @@
-package net.nix.Formaplast;
+package net.nixj.Formaplast;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
-import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by fantsay on 8/31/15.
  */
 public class DBToFile {
 
-    public static void save(HashMap<String, List<GlassEntity>> map) {
+    public static void save(ConcurrentHashMap<String, List<GlassEntity>> map) {
         FileOutputStream fos = null;
         try {
             fos = new FileOutputStream("PriceDB.ser");
@@ -27,6 +27,7 @@ public class DBToFile {
         }
         try {
             oos.writeObject(map);
+
         } catch (IOException e) {
             e.printStackTrace();
         }

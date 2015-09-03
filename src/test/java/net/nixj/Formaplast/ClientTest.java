@@ -1,4 +1,4 @@
-package net.nix.Formaplast;
+package net.nixj.Formaplast;
 
 import junit.framework.TestCase;
 import org.junit.Assert;
@@ -14,9 +14,6 @@ public class ClientTest extends TestCase {
 
     public void testGetPage() throws Exception {
         Client HttpCL = new Client();
-        HttpCL.getPage("http://fps-catalog.com.ua/m_sc/last_table.php", "8532AGNBL1C");
-        Map<Integer, List<String>> glassArray = HttpCL.getGlassArray();
-        Assert.assertFalse(glassArray.isEmpty());
 
     }
 

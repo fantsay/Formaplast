@@ -1,4 +1,4 @@
-package net.nix.Formaplast;
+package net.nixj.Formaplast;
 
 import java.util.LinkedList;
 import java.util.List;
