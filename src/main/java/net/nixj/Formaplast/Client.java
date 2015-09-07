@@ -18,11 +18,13 @@ public class Client {
     HtmlPage resultPage;
     URL site;
     List<String> tmpcodes = new LinkedList<>();
-
+    int counter;
+    CookieManager manager;
+    List<String> missedCodes ;
 
   public void init()
   {
-      CookieManager manager = webClient.getCookieManager();
+      manager = webClient.getCookieManager();
       manager.setCookiesEnabled(true);
       java.util.Set<Cookie> cookies = webClient.getCookieManager().getCookies();
       webClient.getOptions().setThrowExceptionOnScriptError(false);
@@ -54,6 +56,7 @@ public class Client {
     }
    // Returns all codes that match short representation (5 chars)
     public  List<String> getAllCodes(List<String> shortCode, String site) {
+        missedCodes = new LinkedList<>();
         HtmlPage resultPage1 = null;
         URL page=null;
         try {
@@ -63,39 +66,67 @@ public class Client {
         }
         WebRequest reqPostt = new WebRequest(page);
         reqPostt.setHttpMethod(HttpMethod.POST);
-        webClient.waitForBackgroundJavaScript(50000);
+        webClient.waitForBackgroundJavaScript(70000);
         Iterator<String> listOfCodesIterator= shortCode.iterator();
 
        while (listOfCodesIterator.hasNext()) {
-
-           reqPostt.setRequestBody("p1=" + listOfCodesIterator.next());
+           String next = listOfCodesIterator.next();
+           reqPostt.setRequestBody("p1=" + next );
            try {
                resultPage1 = webClient.getPage(reqPostt);
            } catch (IOException e) {
                e.printStackTrace();
            }
-           webClient.waitForBackgroundJavaScript(50000);
+           webClient.waitForBackgroundJavaScript(70000);
+           //IF captcha rerequest lastcode
+           System.out.println(resultPage1.asText().length());
+           if(resultPage1.asText().length()==20)
+           {
+               manager.clearCookies();
+               missedCodes.add(next);
+
+               continue;
+           }
+
 
            try {
-               TimeUnit.SECONDS.sleep(7);
+               TimeUnit.SECONDS.sleep(20);
            } catch (InterruptedException e) {
                e.printStackTrace();
            }
-           try
-           {HtmlTable table = (HtmlTable) resultPage1.getByXPath("//table[@class='body noselect kendogrid k-grid-part']").get(0);
-           int rowCount = table.getRowCount();
+           try {
 
-           for (int i = 1; i < rowCount; i++) {
-               HtmlTableRow row = table.getRow(i);
-               tmpcodes.add(row.getCell(0).asText());
+               List<?> array = resultPage1.getByXPath("//table[@class='body noselect kendogrid k-grid-part']");
 
-           }
+               if (!array.isEmpty()) {
+                   System.out.println(array.size());
+                   HtmlTable table = (HtmlTable)array.get(0);
+                   System.out.println(table.asText());
 
-           } catch (java.lang.IndexOutOfBoundsException ex)
-           {
+
+                   System.out.println(table.asText());
+                   int rowCount = table.getRowCount();
+
+                   for (int i = 1; i < rowCount; i++) {
+                       HtmlTableRow row = table.getRow(i);
+                       tmpcodes.add(row.getCell(0).asText());
+
+                   }
+               }
+           } catch (java.lang.IndexOutOfBoundsException ex) {
+
+               counter++;
+               ex.printStackTrace();
                System.out.println(ex.getMessage());
            }
+
+
+
        }
+        if (!missedCodes.isEmpty())
+        {
+            this.getAllCodes(missedCodes,"http://www.fps-catalog.com.ua/m_sc/search_repl.php");
+        }
         return tmpcodes;
     }
 

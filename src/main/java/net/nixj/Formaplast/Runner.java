@@ -17,18 +17,17 @@ public class Runner {
         Codes shortCodes = new Codes("/home/fantsay/java/codes.txt");
         String current;
         Codes allCodes = new Codes(HttpCL.getAllCodes(shortCodes.getCodes(), "http://www.fps-catalog.com.ua/m_sc/search_repl.php"));
-
         while (allCodes.hasNext()) {
             current = allCodes.getCode();
             try {
-                TimeUnit.SECONDS.sleep(7);
+                TimeUnit.SECONDS.sleep(15);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
 
             try {
                 HttpCL.getPage("http://fps-catalog.com.ua/m_sc/last_table.php", current);
-            } catch (EcmaError ex) {
+                } catch (EcmaError ex) {
                 //NOP
             }
             Parser parser = new Parser(HttpCL.getGlassArray());
